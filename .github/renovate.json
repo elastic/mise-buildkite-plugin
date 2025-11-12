@@ -1,0 +1,11 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "local>elastic/renovate-config"
+  ],
+  "labels": ["renovate"],
+  "automergeStrategy": "squash",
+  "automergeType": "pr",
+  "automergeSchedule": ["at any time"],
+  "schedule": ["* * * * 1-4"]
+}
