@@ -4,8 +4,23 @@
     "local>elastic/renovate-config"
   ],
   "labels": ["renovate"],
+
   "automergeStrategy": "squash",
   "automergeType": "pr",
   "automergeSchedule": ["at any time"],
-  "schedule": ["* * * * 1-4"]
+  "schedule": ["* * * * 1-4"],
+  "packageRules": [
+    {
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "matchPackageNames": [
+        "docker.elastic.co/ci-agent-images/pipelib"
+      ],
+      "automerge": true
+    }
+  ]
 }
