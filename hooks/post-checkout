@@ -28,35 +28,54 @@ export MISE_ENV="${BUILDKITE_PLUGIN_MISE_ENV:-}"
 
 echo "Set MISE_ENV: ${MISE_ENV}"
 
-if [ "${BUILDKITE_PLUGIN_MISE_TRUST:-true}" != "false" ]; then
-  # seems to be needed for tests, but not during actual builds?
-  echo "Running: mise trust -a"
-  mise trust -a
+echo "Marking config files as trusted"
+mise trust -a
+
+echo "Initializes mise in the current shell session (non-interactive)"
+eval "$(mise activate --shims)"
+
+if [ "${BUILDKITE_PLUGIN_GITHUB_TOKEN_ENV_VAR:-}" != "" ]; then
+  export MISE_GITHUB_TOKEN="${!BUILDKITE_PLUGIN_GITHUB_TOKEN_ENV_VAR}"
 fi
 
-if [ "${BUILDKITE_PLUGIN_MISE_ACTIVATE:-true}" != "false" ]; then
-  echo "Running: mise activate"
-  eval "$(mise activate)"
-fi
-
-# support --shims
-if [ "${BUILDKITE_PLUGIN_MISE_ACTIVATE_SHIMS:-true}" != "false" ]; then
-  echo "Running: mise activate --shims"
-  eval "$(mise activate --shims)"
+if [ "${BUILDKITE_PLUGIN_GITHUB_TOKEN_RESOLVE:-"true"}" != "false" ]; then
+  if [ "${MISE_GITHUB_TOKEN:-}" == "" ]; then
+    echo "Resolving MISE_GITHUB_TOKEN from environment variables"
+    if [ "${GITHUB_TOKEN:-}" != "" ]; then
+      echo "Using GitHub token from GITHUB_TOKEN"
+      export MISE_GITHUB_TOKEN="${GITHUB_TOKEN}"
+    elif [ "${VAULT_GITHUB_TOKEN:-}" != "" ]; then
+      echo "Using GitHub token from VAULT_GITHUB_TOKEN"
+      export MISE_GITHUB_TOKEN="${VAULT_GITHUB_TOKEN}"
+    fi
+  fi
 fi
 
 if [ "${BUILDKITE_PLUGIN_MISE_INSTALL:-true}" != "false" ]; then
-  echo "Running: mise install"
+  echo "Installing tools"
   mise install
 fi
 
+echo "Listing installed and active tool versions"
 mise ls
 
 if [ "${BUILDKITE_PLUGIN_MISE_REDACT:-true}" != "false" ]; then
-  echo "Adding redactors"
+  echo "Adding redactors to buildkite agent"
   for value in $(mise env --redacted --values); do
     echo "$value" | buildkite-agent redactor add
   done
+fi
+
+if [ "${BUILDKITE_PLUGIN_MISE_EXPORT_ENV:-true}" != "false" ]; then
+  echo "Exporting environment variables"
+  eval "$(mise env)"
+  # we need to re-activate to ensure shims are in PATH after evaling the above
+  eval "$(mise activate --shims)"
+fi
+
+if [ "${BUILDKITE_PLUGIN_MISE_DOCTOR:-true}" != "false" ]; then
+  echo "Checking mise installation for possible problems"
+  mise doctor
 fi
 
 echo "mise-en-place buildkite plugin setup complete"

@@ -11,22 +11,10 @@ configuration:
       type: string
       default: ""
       description: Version of Mise to install (e.g "YYYY.MM.DD").
-    trust:
-      type: boolean
-      default: true
-      description: Trust the mise.toml file.
     install:
       type: boolean
       default: true
       description: Install the tools specified in the mise.toml file.
-    activate:
-      type: boolean
-      default: true
-      description: Activate the tools specified in the mise.toml file.
-    activate_shims:
-      type: boolean
-      default: true
-      description: Activate using --shims.
     redact:
       type: boolean
       default: true
@@ -35,3 +23,12 @@ configuration:
       type: string
       default: ""
       description: Environment to use for mise commands
+    export_env:
+      type: boolean
+      default: true
+      description: Export environment variables defined in mise.toml to the
+        build environment.
+    doctor:
+      type: boolean
+      default: true
+      description: Run 'mise doctor' to validate the setup.
