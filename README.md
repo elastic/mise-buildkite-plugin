@@ -10,5 +10,5 @@ Add the following to your `pipeline.yml`:
 steps:
   - command: ls
     plugins:
-      - elastic/mise#v1.0.0: ~
+      - elastic/mise#v1.0.1: ~
 ```
