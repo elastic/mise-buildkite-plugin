@@ -1,5 +1,3 @@
-#!/usr/bin/env bats
-
 # Copyright 2025 Elasticsearch B.V.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,20 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-export BUILDKITE_PLUGIN_MISE_ENV="test"
+include ./build/Makefile.base
 
-setup() {
-  load "$BATS_PLUGIN_PATH/load.bash"
+.PHONY: pre-commit
+pre-commit: ## Run all pre-commit checks.
+	@pre-commit run --all --show-diff-on-failure
 
-  # Uncomment to enable stub debugging
-  # export GIT_STUB_DEBUG=/dev/tty
-}
+.PHONY: ci-lint
+ci-lint: apply-license-header ## Run all linting checks.
+	@yamllint plugin.yml
+	@git diff --exit-code
 
-@test "installs mise" {
-  run $PWD/hooks/post-checkout
-
-  assert_output --partial "yq"
-  assert_output --partial "mise.test.toml"
-  assert_output --partial "mise-en-place buildkite plugin setup complete"
-  assert_success
-}
+.PHONY: docker-test
+docker-test: ## Run buildkite/plugin-tester.
+	@docker run -it --rm -v "$(PWD):/plugin" buildkite/plugin-tester

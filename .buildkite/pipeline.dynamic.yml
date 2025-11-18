@@ -1,0 +1,21 @@
+---
+# $yaml-language-server: $schema=https://raw.githubusercontent.com/buildkite/pipeline-schema/main/schema.json
+steps:
+  - label: "🐚 Lint"
+    plugins:
+      - ${MISE_BUILDKITE_PLUGIN}: ~
+    command: |
+      make ci-lint
+
+  - label: "✅ Validate usage"
+    plugins:
+      - ${MISE_BUILDKITE_PLUGIN}: ~
+        env: test
+    command: |
+      yq --version
+
+  - label: "🔬 pre-commit"
+    plugins:
+      - ${MISE_BUILDKITE_PLUGIN}: ~
+    command: |
+      make pre-commit
