@@ -16,7 +16,7 @@ steps:
     id: "validate-catalog-info"
     if_changed:
       include:
-       # if our catalog-info.yaml is changed, make sure it's well-formed according to our internal standards as well as Backstage's validation
+        # if our catalog-info.yaml is changed, make sure it's well-formed according to our internal standards as well as Backstage's validation
         - "catalog-info.yaml"
     command: "/agent/check-catalog-info.sh"
     agents:
