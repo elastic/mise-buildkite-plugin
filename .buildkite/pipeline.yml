@@ -28,14 +28,14 @@ steps:
   - label: "🐚 Lint"
     id: "lint"
     plugins:
-      - ${BUILDKITE_ORGANIZATION_SLUG:-elastic}/mise#${BUILDKITE_BRANCH:-main}: ~
+      - elastic/mise#${BUILDKITE_COMMIT}: ~
     command: |
       make ci-lint
 
   - label: "✅ Validate usage"
     id: "validate-usage"
     plugins:
-      - ${BUILDKITE_ORGANIZATION_SLUG:-elastic}/mise#${BUILDKITE_BRANCH:-main}:
+      - elastic/mise#${BUILDKITE_COMMIT}:
           env: test
     command: |
       yq --version
@@ -43,7 +43,7 @@ steps:
   - label: "🔬 pre-commit"
     id: "pre-commit"
     plugins:
-      - ${BUILDKITE_ORGANIZATION_SLUG:-elastic}/mise#${BUILDKITE_BRANCH:-main}: ~
+      - elastic/mise#${BUILDKITE_COMMIT}: ~
     command: |
       make pre-commit
 
