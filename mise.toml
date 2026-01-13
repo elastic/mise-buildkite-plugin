@@ -1,7 +1,7 @@
 [tools]
 pre-commit = "4.5.1"
 uv = "0.9.21"
-yamllint = "1.37.1"
+yamllint = "1.38.0"
 
 [settings]
 pin = true
