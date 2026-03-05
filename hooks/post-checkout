@@ -18,6 +18,7 @@ set -euo pipefail
 echo "--- Init mise-en-place"
 
 export MISE_VERSION="${BUILDKITE_PLUGIN_MISE_VERSION:-}"
+export MISE_INSTALL_EXT="${BUILDKITE_PLUGIN_MISE_INSTALL_EXT:-tar.gz}"
 
 curl https://mise.run | sh
 
