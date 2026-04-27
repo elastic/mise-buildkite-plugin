@@ -1,6 +1,6 @@
 [tools]
 pre-commit = "4.5.1"
-uv = "0.11.7"
+uv = "0.11.8"
 yamllint = "1.37.1"
 
 [settings]
