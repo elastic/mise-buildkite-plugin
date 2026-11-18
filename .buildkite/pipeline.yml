@@ -47,7 +47,7 @@ steps:
   - label: "🔨 Plugin Tester"
     id: "plugin-tester"
     plugins:
-      - plugin-tester#v1.3.0: ~
+      - plugin-tester#v1.4.0: ~
     agents:
       provider: "gcp"
       image: "family/core-ubuntu-2404"
